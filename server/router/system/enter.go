@@ -25,6 +25,7 @@ type RouterGroup struct {
 	ApiTokenRouter
 	SkillsRouter
 	AudioPptRouter
+	WavenoteUserRouter
 }
 
 var (
@@ -52,4 +53,5 @@ var (
 	skillsApi            = api.ApiGroupApp.SystemApiGroup.SkillsApi
 	aiWorkflowSessionApi = api.ApiGroupApp.SystemApiGroup.AIWorkflowSessionApi
 	audioPptApi          = api.ApiGroupApp.SystemApiGroup.AudioPptApi
+	wavenoteUserApi      = api.ApiGroupApp.SystemApiGroup.WavenoteUserApi
 )

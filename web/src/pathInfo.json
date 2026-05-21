@@ -62,6 +62,8 @@
   "/src/view/system/audioPpt/audioPpt.vue": "AudioPpt",
   "/src/view/system/audioPpt/audioPptForm.vue": "AudioPptForm",
   "/src/view/system/state.vue": "State",
+  "/src/view/system/wavenoteUser/wavenoteUser.vue": "WavenoteUser",
+  "/src/view/system/wavenoteUser/wavenoteUserForm.vue": "WavenoteUserForm",
   "/src/view/systemTools/aiWrokflow/index.vue": "AIWorkflow",
   "/src/view/systemTools/apiToken/index.vue": "Index",
   "/src/view/systemTools/autoCode/component/fieldDialog.vue": "FieldDialog",

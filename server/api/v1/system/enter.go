@@ -29,6 +29,7 @@ type ApiGroup struct {
 	SkillsApi
 	AIWorkflowSessionApi
 	AudioPptApi
+	WavenoteUserApi
 }
 
 var (
@@ -58,4 +59,5 @@ var (
 	apiTokenService          = service.ServiceGroupApp.SystemServiceGroup.ApiTokenService
 	skillsService            = service.ServiceGroupApp.SystemServiceGroup.SkillsService
 	audioPptService          = service.ServiceGroupApp.SystemServiceGroup.AudioPptService
+	wavenoteUserService      = service.ServiceGroupApp.SystemServiceGroup.WavenoteUserService
 )

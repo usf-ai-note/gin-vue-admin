@@ -28,4 +28,5 @@ type ServiceGroup struct {
 	LoginLogService
 	ApiTokenService
 	AudioPptService
+	WavenoteUserService
 }

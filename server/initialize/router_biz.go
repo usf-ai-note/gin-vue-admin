@@ -19,5 +19,6 @@ func initBizRouter(routers ...*gin.RouterGroup) {
 	{
 		systemRouter := router.RouterGroupApp.System
 		systemRouter.InitAudioPptRouter(privateGroup, publicGroup)
+		systemRouter.InitWavenoteUserRouter(privateGroup, publicGroup)
 	}
 }

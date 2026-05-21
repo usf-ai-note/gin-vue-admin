@@ -12,6 +12,6 @@ func bizModel() error {
 		return err
 	}
 	ai_userDb := global.GetGlobalDBByDBName("ai_user")
-	ai_userDb.AutoMigrate(system.AudioPpt{})
+	ai_userDb.AutoMigrate(system.AudioPpt{}, system.WavenoteUser{})
 	return nil
 }
