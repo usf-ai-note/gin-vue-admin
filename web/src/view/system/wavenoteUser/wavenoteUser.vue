@@ -3,9 +3,38 @@
   <div>
     <div class="gva-search-box">
       <el-form ref="elSearchFormRef" :inline="true" :model="searchInfo" class="demo-form-inline" @keyup.enter="onSubmit">
+        <el-form-item label="ID" prop="id">
+          <el-input v-model.number="searchInfo.id" clearable placeholder="请输入ID" />
+        </el-form-item>
+
+        <el-form-item label="邮箱" prop="email">
+          <el-input v-model="searchInfo.email" clearable placeholder="请输入邮箱" />
+        </el-form-item>
+
+        <el-form-item label="第三方账号" prop="thirdAccount">
+          <el-input v-model="searchInfo.thirdAccount" clearable placeholder="请输入第三方账号" />
+        </el-form-item>
 
         <template v-if="showAllQuery">
           <!-- 将需要控制显示状态的查询条件添加到此范围内 -->
+          <el-form-item label="渠道UID" prop="channelUid">
+            <el-input v-model="searchInfo.channelUid" clearable placeholder="请输入渠道UID" />
+          </el-form-item>
+
+          <el-form-item label="注册来源" prop="origin">
+            <el-select v-model="searchInfo.origin" clearable placeholder="请选择注册来源">
+              <el-option :value="1" label="邮箱注册" />
+              <el-option :value="2" label="Google ID" />
+              <el-option :value="3" label="Apple ID" />
+            </el-select>
+          </el-form-item>
+
+          <el-form-item label="迁移状态" prop="syncStatus">
+            <el-select v-model="searchInfo.syncStatus" clearable placeholder="请选择迁移状态">
+              <el-option :value="1" label="迁移" />
+              <el-option :value="2" label="被迁移" />
+            </el-select>
+          </el-form-item>
         </template>
 
         <el-form-item>
@@ -350,10 +379,18 @@ const page = ref(1)
 const total = ref(0)
 const pageSize = ref(10)
 const tableData = ref([])
-const searchInfo = ref({})
+const createSearchInfo = () => ({
+  id: undefined,
+  email: '',
+  thirdAccount: '',
+  channelUid: '',
+  origin: undefined,
+  syncStatus: undefined,
+})
+const searchInfo = ref(createSearchInfo())
 // 重置
 const onReset = () => {
-  searchInfo.value = {}
+  searchInfo.value = createSearchInfo()
   getTableData()
 }
 
@@ -362,11 +399,14 @@ const onSubmit = () => {
   elSearchFormRef.value?.validate(async(valid) => {
     if (!valid) return
     page.value = 1
-    if (searchInfo.value.origin === ""){
-        searchInfo.value.origin=null
+    if (searchInfo.value.id === '') {
+      searchInfo.value.id = undefined
     }
-    if (searchInfo.value.syncStatus === ""){
-        searchInfo.value.syncStatus=null
+    if (searchInfo.value.origin === '') {
+      searchInfo.value.origin = undefined
+    }
+    if (searchInfo.value.syncStatus === '') {
+      searchInfo.value.syncStatus = undefined
     }
     getTableData()
   })
