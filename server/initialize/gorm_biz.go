@@ -2,6 +2,7 @@ package initialize
 
 import (
 	"github.com/flipped-aurora/gin-vue-admin/server/global"
+	"github.com/flipped-aurora/gin-vue-admin/server/model/system"
 )
 
 func bizModel() error {
@@ -10,5 +11,7 @@ func bizModel() error {
 	if err != nil {
 		return err
 	}
+	ai_userDb := global.GetGlobalDBByDBName("ai_user")
+	ai_userDb.AutoMigrate(system.AudioPpt{})
 	return nil
 }

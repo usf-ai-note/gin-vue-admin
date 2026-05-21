@@ -59,6 +59,8 @@
   "/src/view/superAdmin/operation/sysOperationRecord.vue": "SysOperationRecord",
   "/src/view/superAdmin/params/sysParams.vue": "SysParams",
   "/src/view/superAdmin/user/user.vue": "User",
+  "/src/view/system/audioPpt/audioPpt.vue": "AudioPpt",
+  "/src/view/system/audioPpt/audioPptForm.vue": "AudioPptForm",
   "/src/view/system/state.vue": "State",
   "/src/view/systemTools/aiWrokflow/index.vue": "AIWorkflow",
   "/src/view/systemTools/apiToken/index.vue": "Index",
