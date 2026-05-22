@@ -1,4 +1,18 @@
 
+## Wavenote 定制说明
+
+1. 此项目为 fork 出来的项目：
+   `master` 分支是 Wavenote 生产分支；
+   `main` 分支是原项目分支，用来同步最新原项目。请勿提交代码到`main` 分支
+
+2. 项目未初始化之前，需要先将 `/server/config.sample.yaml` 复制为 `/server/config.yaml`，并且勿手动修改数据库信息。
+   如果项目已初始化，请配置 `config.yaml` 中的 `mysql` 配置（大概在第 103 行）和 `db-list` 配置（大概在第 169 行）。
+
+3. 新增一个表单时：
+   左侧“编程辅助”菜单 => “代码生成器” => “从数据库创建”，选择目标表名，点击“使用此表”；在“自动化结构”里，“选择模版”选择 `system`，“业务库”选择 `ai_user`，然后依次点击“预览代码”“生成代码”。
+   “超级管理员” => “api管理”，在上方“同步api”里增加需要的 api，然后在中间列表中选择 api“分配角色”。
+   “超级管理员” => “菜单管理”，进行“分配角色”，并编辑菜单层级。
+
 <div align=center>
 <img src="http://qmplusimg.henrongyi.top/gvalogo.jpg" width="300" height="300" />
 </div>
