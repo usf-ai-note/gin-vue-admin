@@ -15,6 +15,7 @@ export default ({ mode }) => {
   AddSecret('')
   const env = loadEnv(mode, process.cwd())
   viteLogo(env)
+  const enableVueDevTools = env.VITE_ENABLE_VUE_DEVTOOLS === 'true'
 
   const timestamp = Date.parse(new Date())
 
@@ -33,6 +34,9 @@ export default ({ mode }) => {
     publicDir: 'public', // 静态资源文件夹
     resolve: {
       alias
+    },
+    optimizeDeps: {
+      exclude: ['@vueuse/integrations/useCookies']
     },
     css: {
       preprocessorOptions: {
@@ -84,7 +88,7 @@ export default ({ mode }) => {
       }
     },
     plugins: [
-      env.VITE_POSITION === 'open' &&
+      enableVueDevTools &&
       vueDevTools({ launchEditor: env.VITE_EDITOR }),
       vuePlugin(),
       svgBuilder(['./src/plugin/', './src/assets/icons/'], base, outDir, 'assets', mode),
