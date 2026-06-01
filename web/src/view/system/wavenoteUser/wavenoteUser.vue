@@ -48,6 +48,7 @@
     <div class="gva-table-box">
         <el-table
         ref="multipleTable"
+        class="wavenote-user-table"
         style="width: 100%"
         tooltip-effect="dark"
         :data="tableData"
@@ -55,15 +56,31 @@
         >
             <el-table-column align="left" label="uid" prop="id" width="120" />
 
-            <el-table-column align="left" label="邮箱" prop="email" width="120" />
+            <el-table-column align="left" label="邮箱" prop="email" width="320">
+              <template #default="scope">
+                <div class="email-cell">
+                  <span class="email-text" :title="scope.row.email || '-'">{{ scope.row.email || '-' }}</span>
+                  <el-button
+                    v-if="scope.row.email"
+                    type="primary"
+                    link
+                    size="small"
+                    class="copy-email-button"
+                    @click="copyEmail(scope.row.email)"
+                  >
+                    复制
+                  </el-button>
+                </div>
+              </template>
+            </el-table-column>
 
-            <el-table-column align="left" label="第三方账号" prop="thirdAccount" width="120" />
+            <el-table-column align="left" label="第三方账号" prop="thirdAccount" width="120" show-overflow-tooltip />
 
-            <el-table-column align="left" label="渠道uid" prop="channelUid" width="120" />
+            <el-table-column align="left" label="渠道uid" prop="channelUid" width="120" show-overflow-tooltip />
 
-            <el-table-column align="left" label="用户昵称" prop="nickname" width="120" />
+            <el-table-column align="left" label="用户昵称" prop="nickname" width="120" show-overflow-tooltip />
 
-            <el-table-column align="left" label="头像" prop="icon" width="120" />
+            <el-table-column align="left" label="头像" prop="icon" width="120" show-overflow-tooltip />
 
             <el-table-column align="left" label="用户类型" prop="userType" width="120">
     <template #default="scope">{{ formatUserType(scope.row.userType) }}</template>
@@ -78,17 +95,17 @@
             <el-table-column align="left" label="注册来源" prop="origin" width="180">
     <template #default="scope">{{ formatOrigin(scope.row.origin) }}</template>
 </el-table-column>
-            <el-table-column align="left" label="注册时候的系统语言" prop="lan" width="120" />
+            <el-table-column align="left" label="注册时候的系统语言" prop="lan" width="120" show-overflow-tooltip />
 
-            <el-table-column align="left" label="转写语言" prop="transLan" width="120" />
+            <el-table-column align="left" label="转写语言" prop="transLan" width="120" show-overflow-tooltip />
 
-            <el-table-column align="left" label="注册国家/地区编码" prop="country" width="120" />
+            <el-table-column align="left" label="注册国家/地区编码" prop="country" width="120" show-overflow-tooltip />
 
             <el-table-column align="left" label="用户所属行业" prop="industry" width="120" />
 
-            <el-table-column align="left" label="设备ID" prop="deviceId" width="120" />
+            <el-table-column align="left" label="设备ID" prop="deviceId" width="120" show-overflow-tooltip />
 
-            <el-table-column align="left" label="注册ip" prop="ip" width="120" />
+            <el-table-column align="left" label="注册ip" prop="ip" width="120" show-overflow-tooltip />
 
             <el-table-column align="left" label="迁移状态" prop="syncStatus" width="160">
     <template #default="scope">{{ formatSyncStatus(scope.row.syncStatus) }}</template>
@@ -202,6 +219,7 @@ import {
 
 // 全量引入格式化工具 请按需保留
 import { formatDate } from '@/utils/format'
+import { ElMessage } from 'element-plus'
 import { ref } from 'vue'
 import { useAppStore } from "@/pinia"
 
@@ -272,6 +290,20 @@ const formatDeletedAt = (value) => {
   const seconds = String(date.getUTCSeconds()).padStart(2, '0')
 
   return `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`
+}
+
+const copyEmail = async (email) => {
+  if (!email) {
+    ElMessage.warning('没有可复制的邮箱')
+    return
+  }
+
+  try {
+    await navigator.clipboard.writeText(email)
+    ElMessage.success('邮箱已复制')
+  } catch (error) {
+    ElMessage.error('复制失败，请手动复制')
+  }
 }
 
 // =========== 表格控制部分 ===========
@@ -371,6 +403,34 @@ const closeDetailShow = () => {
 
 </script>
 
-<style>
+<style scoped>
+.wavenote-user-table :deep(.el-table__row) {
+  height: 44px;
+}
 
+.wavenote-user-table :deep(.cell) {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  line-height: 22px;
+}
+
+.email-cell {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-width: 0;
+}
+
+.email-text {
+  min-width: 0;
+  flex: 1;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.copy-email-button {
+  flex-shrink: 0;
+}
 </style>
