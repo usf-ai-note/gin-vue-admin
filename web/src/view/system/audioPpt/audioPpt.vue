@@ -34,50 +34,38 @@
     </div>
     <div class="gva-table-box">
         <el-table
+        class="audio-ppt-table"
         ref="multipleTable"
         style="width: 100%"
         tooltip-effect="dark"
         :data="tableData"
         row-key="id"
         >
-            <el-table-column align="left" label="id" prop="id" width="120" />
+            <el-table-column align="left" label="id" prop="id" width="80" />
 
-            <el-table-column align="left" label="uid" prop="uid" width="120" />
+            <el-table-column align="left" label="uid" prop="uid" width="90" />
 
-            <el-table-column align="left" label="task id" prop="taskId" width="120" />
+            <el-table-column align="left" label="task id" prop="taskId" width="280" />
 
-            <el-table-column align="left" label="audio_id" prop="audioId" width="120" />
+            <el-table-column align="left" label="audio_id" prop="audioId" width="100" />
 
-            <el-table-column align="left" label="总结结果data_id" prop="summaryId" width="120" />
+            <el-table-column align="left" label="总结结果data_id" prop="summaryId" width="300" />
 
             <el-table-column align="left" label="内容详略级别" prop="detailLevel" width="120" />
 
             <el-table-column align="left" label="页数档位" prop="slideNum" width="120" />
 
-            <el-table-column label="outline" prop="outline" width="200">
-   <template #default="scope">
-      [富文本内容]
-   </template>
-</el-table-column>
             <el-table-column align="left" label="模型" prop="provider" width="120" />
 
             <el-table-column align="left" label="生成状态" prop="status" width="120">
               <template #default="scope">
-                {{ formatStatus(scope.row.status) }}
+                <el-tag :type="formatStatusTag(scope.row.status)">
+                  {{ formatStatus(scope.row.status) }}
+                </el-tag>
               </template>
             </el-table-column>
 
-            <el-table-column align="left" label="图片path" prop="imgs" width="120" />
-
-            <el-table-column align="left" label="ppt path" prop="ppt" width="120" />
-
             <el-table-column align="left" label="幻灯片数量" prop="slideCount" width="120" />
-
-            <el-table-column align="left" label="analysis tokens数" prop="analysisTokens" width="120" />
-
-            <el-table-column align="left" label="image tokens数" prop="imageTokens" width="120" />
-
-            <el-table-column align="left" label="总tokens数" prop="totalTokens" width="120" />
 
             <el-table-column align="left" label="创建时间" prop="createdAt" width="180">
    <template #default="scope">{{ formatDate(scope.row.createdAt) }}</template>
@@ -132,14 +120,13 @@
                     <el-descriptions-item label="页数档位">
     {{ detailForm.slideNum }}
 </el-descriptions-item>
-                    <el-descriptions-item label="outline">
-    <RichView v-model="detailForm.outline" />
-</el-descriptions-item>
                     <el-descriptions-item label="模型">
     {{ detailForm.provider }}
 </el-descriptions-item>
                     <el-descriptions-item label="生成状态">
-    {{ formatStatus(detailForm.status) }}
+    <el-tag :type="formatStatusTag(detailForm.status)">
+      {{ formatStatus(detailForm.status) }}
+    </el-tag>
 </el-descriptions-item>
                     <el-descriptions-item label="图片path">
     {{ detailForm.imgs }}
@@ -169,6 +156,13 @@
     {{ formatDeletedAt(detailForm.deletedAt) }}
 </el-descriptions-item>
             </el-descriptions>
+            <div class="detail-outline-section">
+              <div class="detail-outline-title">outline</div>
+              <div v-if="detailForm.outline" class="detail-outline-content rich-content" v-html="detailForm.outline"></div>
+              <div v-if="!detailForm.outline" class="detail-outline-empty">
+                -
+              </div>
+            </div>
         </el-drawer>
 
   </div>
@@ -179,7 +173,6 @@ import {
   findAudioPpt,
   getAudioPptList
 } from '@/api/system/audioPpt'
-import RichView from '@/components/richtext/rich-view.vue'
 
 // 全量引入格式化工具 请按需保留
 import { formatDate } from '@/utils/format'
@@ -207,8 +200,8 @@ const pageSize = ref(10)
 const tableData = ref([])
 const statusOptions = [
   { label: '生成中', value: '300' },
-  { label: '生成成功', value: '200' },
-  { label: '生成失败', value: '400' }
+  { label: '生成成功', value: '301' },
+  { label: '生成失败', value: '302' }
 ]
 const searchInfo = ref({
   uid: '',
@@ -217,7 +210,8 @@ const searchInfo = ref({
 })
 
 const formatStatus = (value) => {
-  const match = statusOptions.find(item => item.value === value)
+  const normalizedValue = value === null || value === undefined ? '' : String(value)
+  const match = statusOptions.find(item => item.value === normalizedValue)
   if (match) {
     return match.label
   }
@@ -225,6 +219,20 @@ const formatStatus = (value) => {
     return '-'
   }
   return `未知状态`
+}
+
+const formatStatusTag = (value) => {
+  const normalizedValue = value === null || value === undefined ? '' : String(value)
+  if (normalizedValue === '301') {
+    return 'success'
+  }
+  if (normalizedValue === '302') {
+    return 'danger'
+  }
+  if (normalizedValue === '300') {
+    return 'warning'
+  }
+  return 'info'
 }
 
 const formatDeletedAt = (value) => {
@@ -329,6 +337,88 @@ const closeDetailShow = () => {
 
 </script>
 
-<style>
+<style scoped>
+.audio-ppt-table :deep(.el-table__cell .cell) {
+  white-space: nowrap;
+}
 
+.detail-outline-section {
+  margin-top: 16px;
+}
+
+.detail-outline-title {
+  margin-bottom: 8px;
+  font-weight: 600;
+  color: var(--el-text-color-primary);
+}
+
+.detail-outline-content {
+  padding: 16px;
+  border: 1px solid var(--el-border-color);
+  border-radius: 4px;
+  background: var(--el-fill-color-blank);
+  overflow: auto;
+}
+
+.detail-outline-empty {
+  color: var(--el-text-color-secondary);
+}
+
+.rich-content {
+  line-height: 1.7;
+  word-break: break-word;
+}
+
+.rich-content:deep(h1) {
+  font-size: 2em;
+  font-weight: 700;
+}
+
+.rich-content:deep(h2) {
+  font-size: 1.5em;
+  font-weight: 700;
+}
+
+.rich-content:deep(h3) {
+  font-size: 1.17em;
+  font-weight: 700;
+}
+
+.rich-content:deep(h4) {
+  font-size: 1em;
+  font-weight: 700;
+}
+
+.rich-content:deep(h5) {
+  font-size: 0.83em;
+  font-weight: 700;
+}
+
+.rich-content:deep(h6) {
+  font-size: 0.67em;
+  font-weight: 700;
+}
+
+.rich-content:deep(ul),
+.rich-content:deep(ol) {
+  margin: 1em 0;
+  padding-left: 2em;
+}
+
+.rich-content:deep(ul) {
+  list-style-type: disc;
+}
+
+.rich-content:deep(ol) {
+  list-style-type: decimal;
+}
+
+.rich-content:deep(li) {
+  margin: 0.25em 0;
+}
+
+.rich-content:deep(a) {
+  color: var(--el-color-primary, #409eff);
+  text-decoration: underline;
+}
 </style>

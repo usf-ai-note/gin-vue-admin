@@ -19,7 +19,7 @@
     <el-input v-model="formData.summaryId" :clearable="true" placeholder="请输入总结结果data_id" />
 </el-form-item>
         <el-form-item label="PPT 风格:" prop="style">
-    <el-switch v-model="formData.style" active-color="#13ce66" inactive-color="#ff4949" active-text="是" inactive-text="否" clearable ></el-switch>
+    <el-input v-model.number="formData.style" :clearable="true" placeholder="请输入 PPT 风格" />
 </el-form-item>
         <el-form-item label="内容详略级别:" prop="detailLevel">
     <el-input v-model="formData.detailLevel" :clearable="true" placeholder="请输入内容详略级别" />
@@ -108,7 +108,7 @@ const formData = ref({
             taskId: '',
             audioId: undefined,
             summaryId: '',
-            style: false,
+            style: undefined,
             detailLevel: '',
             slideNum: '',
             outline: '',
